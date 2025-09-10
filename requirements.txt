@@ -1,0 +1,21 @@
+# Mail Handler Dependencies
+# NOTE: These are intentionally vulnerable versions for Dependabot testing
+
+# HTTP library with known vulnerabilities
+requests==2.25.1
+
+# Template engine with known vulnerabilities  
+Jinja2==2.11.3
+
+# Web framework with known vulnerabilities
+Flask==1.1.4
+
+# URL handling library with known vulnerabilities
+urllib3==1.26.4
+
+# Image processing library with known vulnerabilities
+Pillow==8.1.2
+
+# Additional vulnerable packages commonly used in mail applications
+PyYAML==5.4.1
+cryptography==3.4.6
