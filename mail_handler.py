@@ -1,8 +1,7 @@
 #!/usr/bin/env python3
 """
-Mail Handler Application
-A simple email processing and sending application that demonstrates various mail operations.
-This application uses several third-party libraries for enhanced functionality.
+Simple Mail Handler Service
+A basic email processing and sending service for web applications.
 """
 
 import smtplib
@@ -14,12 +13,10 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.base import MIMEBase
 from email import encoders
 
-# Third-party imports (these will have vulnerable versions in requirements.txt)
+# Third-party imports
 import requests
 from jinja2 import Template
 from flask import Flask, request, jsonify
-import urllib3
-from PIL import Image
 
 app = Flask(__name__)
 
@@ -60,28 +57,28 @@ class MailHandler:
         return template.render(**context)
     
     def fetch_email_data(self, url):
-        """Fetch email data from external API using requests."""
+        """Fetch email data from external API."""
         try:
-            # Disable SSL warnings (security risk - but needed for demo)
-            urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
-            
-            response = requests.get(url, verify=False, timeout=10)
+            response = requests.get(url, timeout=10)
             response.raise_for_status()
             return response.json()
         except requests.exceptions.RequestException as e:
             return {"error": str(e)}
     
-    def process_email_image(self, image_path):
-        """Process email attachments using PIL."""
+    def process_email_attachment(self, file_path):
+        """Process email attachments (basic file handling)."""
         try:
-            with Image.open(image_path) as img:
-                # Basic image processing
-                img.thumbnail((200, 200))
-                processed_path = f"processed_{os.path.basename(image_path)}"
-                img.save(processed_path)
-                return processed_path
+            # Basic file processing - just verify file exists and get size
+            if os.path.exists(file_path):
+                file_size = os.path.getsize(file_path)
+                return {
+                    "processed": True,
+                    "file_path": file_path,
+                    "size": file_size
+                }
+            return {"processed": False, "error": "File not found"}
         except Exception as e:
-            return None
+            return {"processed": False, "error": str(e)}
 
 @app.route('/send_mail', methods=['POST'])
 def send_mail_endpoint():
@@ -135,8 +132,8 @@ def fetch_mail_data_endpoint():
 
 def main():
     """Main function to demonstrate mail handling capabilities."""
-    print("Mail Handler Application")
-    print("=======================")
+    print("Simple Mail Handler Service")
+    print("===========================")
     
     # Initialize mail handler
     mail_handler = MailHandler()
@@ -152,13 +149,8 @@ def main():
     processed_email = mail_handler.process_template(template, context)
     print(f"Processed template: {processed_email}")
     
-    # Example external data fetch (will fail in demo, but shows usage)
-    print("\nFetching email data from external API...")
-    external_data = mail_handler.fetch_email_data("https://jsonplaceholder.typicode.com/posts/1")
-    print(f"External data: {external_data}")
-    
-    print("\nMail handler initialized. Run 'python mail_handler.py' to start Flask server.")
-    print("Endpoints available:")
+    print("\nMail service ready. Run 'python mail_handler.py server' to start web server.")
+    print("Available endpoints:")
     print("  POST /send_mail - Send emails")
     print("  POST /process_template - Process email templates")
     print("  GET /fetch_mail_data?url=<url> - Fetch external email data")
