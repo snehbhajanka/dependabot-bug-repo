@@ -1,4 +1,4 @@
 # Mail Handler Dependencies
 Flask==1.1.4
-requests==2.25.1
+requests==2.32.4
 Jinja2==2.11.3
