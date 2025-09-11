@@ -66,10 +66,14 @@ curl -X POST http://localhost:5000/process_template \
 
 ## Dependencies
 
-- **Flask**: Web framework for the REST API
-- **Jinja2**: Template engine for dynamic email content
-- **requests**: HTTP library for external API calls
-- **Pillow**: Image processing for email attachments
+- **Flask**: Web framework for the REST API (≥3.0.2 for security)
+- **Jinja2**: Template engine for dynamic email content (≥3.1.2)
+- **requests**: HTTP library for external API calls (≥2.25.1)
+
+## Security
+
+This project uses Flask ≥3.0.2 which includes fixes for:
+- CVE-2023-30861: Flask session cookie disclosure vulnerability due to missing Vary: Cookie header
 
 ## License
 
